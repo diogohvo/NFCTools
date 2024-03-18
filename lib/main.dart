@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tester_app/others_page.dart';
+import 'after_read.dart';
+import 'before_read.dart';
+import 'write_page.dart';
 
 /// Flutter code sample for [NavigationBar].
 
@@ -29,6 +33,8 @@ class _HomepageNav extends State<HomepageNav> {
   int currentPageIndex = 0;
   final _pageViewController = PageController();
   Widget readPage = BeforeRead(theme: ThemeData.dark(useMaterial3: true));
+  Widget writePage = WritePage(theme: ThemeData.dark(useMaterial3: true));
+  Widget othersPage = OthersPage(theme: ThemeData.dark(useMaterial3: true));
 
   @override
   Widget build(BuildContext context) {
@@ -60,83 +66,13 @@ class _HomepageNav extends State<HomepageNav> {
           //--------- Write page
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () => _dialogBuilder(context),
-              child: const Column(
-                children: <Widget>[
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.text_snippet),
-                      title: Text('Texto'),
-                      subtitle: Text('Adicionar Texto'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.add_link),
-                      title: Text('URL'),
-                      subtitle: Text('Adicionar URL'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.wifi),
-                      title: Text('Rede WiFi'),
-                      subtitle: Text('Adicionar Rede WiFi'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.share_location),
-                      title: Text('Localização'),
-                      subtitle: Text('Adicionar Localização'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: writePage,
           ),
 
-          //-------------- Other's page
+          //----------- Other's page
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () => _dialogBuilder(context),
-              child: const Column(
-                children: <Widget>[
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.file_copy),
-                      title: Text('Copiar tag'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.delete),
-                      title: Text('Apagar tag'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.data_usage),
-                      title: Text('Formatar memória'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.lock),
-                      title: Text('Bloquear tag'),
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.vpn_key),
-                      title: Text('Definir senha'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: othersPage,
           ),
           //---------------- Tasks page
           Padding(
@@ -220,101 +156,6 @@ class _HomepageNav extends State<HomepageNav> {
           ],
         );
       },
-    );
-  }
-}
-
-class BeforeRead extends StatelessWidget {
-  const BeforeRead({
-    super.key,
-    required this.theme,
-  });
-
-  final ThemeData theme;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.nfc, size: 40),
-          const SizedBox(height: 22.0),
-          Text(
-            'Aproxime-se de um disp. NFC',
-            style: theme.textTheme.titleLarge,
-          ),
-          const SizedBox(height: 90),
-        ],
-      ),
-    );
-  }
-}
-
-class AfterRead extends StatelessWidget {
-  const AfterRead({
-    super.key,
-    required this.theme,
-  });
-
-  final ThemeData theme;
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        children: <Widget>[
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.memory),
-              title: Text('Tipo de tag:'),
-              subtitle: Text('NXP - NTAG213'),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.confirmation_number),
-              title: Text('Serial Number'),
-              subtitle: Text('04:61:E3:AA:07:AF:81'),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.key),
-              title: Text('Protegido por senha'),
-              subtitle: Text('Não'),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.storage),
-              title: Text('Informação da Memória'),
-              subtitle: Text('180 bytes: 45 páginas (4 bytes cada)'),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.storage_rounded),
-              title: Text('Tamanho'),
-              subtitle: Text('4 / 137 bytes'),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.replay_outlined),
-              title: Text('Gravável'),
-              subtitle: Text('Sim'),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.content_paste_search),
-              title: Text('Conteúdo'),
-              subtitle: Text('Vazio'),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
