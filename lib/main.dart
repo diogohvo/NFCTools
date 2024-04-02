@@ -3,6 +3,7 @@ import 'package:tester_app/others_page.dart';
 import 'after_read.dart';
 import 'before_read.dart';
 import 'write_page.dart';
+import 'tasks_page.dart';
 
 /// Flutter code sample for [NavigationBar].
 
@@ -35,6 +36,7 @@ class _HomepageNav extends State<HomepageNav> {
   Widget readPage = BeforeRead(theme: ThemeData.dark(useMaterial3: true));
   Widget writePage = WritePage(theme: ThemeData.dark(useMaterial3: true));
   Widget othersPage = OthersPage(theme: ThemeData.dark(useMaterial3: true));
+  Widget tasksPage = TasksPage(theme: ThemeData.dark(useMaterial3: true));
 
   @override
   Widget build(BuildContext context) {
@@ -77,20 +79,7 @@ class _HomepageNav extends State<HomepageNav> {
           //---------------- Tasks page
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () => _dialogBuilder(context),
-              child: const Column(
-                children: <Widget>[
-                  Card(
-                    child: ListTile(
-                      leading: Icon(Icons.settings_suggest),
-                      title: Text('Nova tarefa'),
-                      subtitle: Text('Adicionar nova tarefa'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: tasksPage,
           ),
           //----------- fim das páginas
         ],
@@ -132,30 +121,6 @@ class _HomepageNav extends State<HomepageNav> {
           ),
         ],
       ),
-    );
-  }
-
-  //---------------caixa de dialogo
-  Future<void> _dialogBuilder(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Escrever na tag NFC'),
-          content: const Icon(Icons.nfc, size: 40),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }
