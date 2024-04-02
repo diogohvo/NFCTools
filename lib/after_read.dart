@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class AfterRead extends StatelessWidget {
+  final Map<String, dynamic> tagData;
   const AfterRead({
     super.key,
     required this.theme,
+    required this.tagData,
   });
 
   final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    final cachedMessage = tagData['ndef']['cachedMessage']['records'];
+    return Center(
       child: Column(
         children: <Widget>[
-          Card(
+          const Card(
             child: ListTile(
               leading: Icon(Icons.memory),
               title: Text('Tipo de tag:'),
@@ -22,48 +26,73 @@ class AfterRead extends StatelessWidget {
           ),
           Card(
             child: ListTile(
-              leading: Icon(Icons.confirmation_number),
-              title: Text('Serial Number'),
-              subtitle: Text('04:61:E3:AA:07:AF:81'),
+              leading: const Icon(Icons.confirmation_number),
+              title: const Text('Número de Série'),
+              subtitle: Text(tagData['nfca']['identifier'].toString()),
             ),
           ),
           Card(
             child: ListTile(
-              leading: Icon(Icons.key),
-              title: Text('Protegido por senha'),
-              subtitle: Text('Não'),
+              leading: const Icon(Icons.info),
+              title: const Text('Tecnologias'),
+              subtitle: Text(_getTechListString(tagData)),
             ),
           ),
           Card(
             child: ListTile(
-              leading: Icon(Icons.storage),
-              title: Text('Informação da Memória'),
-              subtitle: Text('180 bytes: 45 páginas (4 bytes cada)'),
+              leading: const Icon(Icons.key),
+              title: const Text('Tornar Leitura Apenas'),
+              subtitle: Text(tagData['ndef']['canMakeReadOnly'].toString()),
             ),
           ),
           Card(
             child: ListTile(
-              leading: Icon(Icons.storage_rounded),
-              title: Text('Tamanho'),
-              subtitle: Text('4 / 137 bytes'),
+              leading: const Icon(Icons.storage_rounded),
+              title: const Text('Tamanho'),
+              subtitle: Text('${tagData['ndef']['maxSize']} bytes'),
             ),
           ),
           Card(
             child: ListTile(
-              leading: Icon(Icons.replay_outlined),
-              title: Text('Gravável'),
-              subtitle: Text('Sim'),
+              leading: const Icon(Icons.replay_outlined),
+              title: const Text('Gravável'),
+              subtitle: Text(tagData['ndef']['isWritable'].toString()),
             ),
           ),
           Card(
             child: ListTile(
-              leading: Icon(Icons.content_paste_search),
-              title: Text('Conteúdo'),
-              subtitle: Text('Vazio'),
+              leading: const Icon(Icons.content_paste_search),
+              title: Text(
+                  'Conteúdo: ${_getPayloadType(utf8.decode(cachedMessage[0]['type']))}'),
+              subtitle:
+                  Text(utf8.decode(cachedMessage[0]['payload'].sublist(3))),
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _getTechListString(Map<String, dynamic> tagData) {
+    final techList = <String>[];
+    if (tagData.containsKey('nfca')) techList.add('NfcA');
+    if (tagData.containsKey('nfcb')) techList.add('NfcB');
+    if (tagData.containsKey('nfcf')) techList.add('NfcF');
+    if (tagData.containsKey('nfcv')) techList.add('NfcV');
+    if (tagData.containsKey('isodep')) techList.add('IsoDep');
+    if (tagData.containsKey('mifareclassic')) techList.add('MifareClassic');
+    if (tagData.containsKey('mifareultralight')) {
+      techList.add('MifareUltralight');
+    }
+    if (tagData.containsKey('ndef')) techList.add('Ndef');
+    if (tagData.containsKey('ndefformatable')) techList.add('NdefFormatable');
+    return techList.join(' / ');
+  }
+
+  String _getPayloadType(String encoded) {
+    if (encoded == 'T') {
+      return 'Texto';
+    }
+    return encoded;
   }
 }

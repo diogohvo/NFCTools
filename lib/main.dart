@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tester_app/others_page.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 import 'after_read.dart';
 import 'before_read.dart';
 import 'write_page.dart';
 import 'tasks_page.dart';
-
-/// Flutter code sample for [NavigationBar].
+import 'dart:developer';
 
 void main() => runApp(const HwApp());
 
@@ -37,23 +37,39 @@ class _HomepageNav extends State<HomepageNav> {
   Widget writePage = WritePage(theme: ThemeData.dark(useMaterial3: true));
   Widget othersPage = OthersPage(theme: ThemeData.dark(useMaterial3: true));
   Widget tasksPage = TasksPage(theme: ThemeData.dark(useMaterial3: true));
+  Map<String, dynamic> tagData = {};
+  @override
+  void initState() {
+    super.initState();
+    initializeNFC();
+  }
+
+  Future<void> initializeNFC() async {
+    try {
+      await NfcManager.instance.startSession(
+        onDiscovered: (NfcTag tag) async {
+          //Tag detetada
+          tagData = tag.data;
+          setState(() {
+            readPage = AfterRead(
+              theme: ThemeData.dark(useMaterial3: true),
+              tagData: tagData,
+            );
+          });
+          log('Tag discovered: ${tag.data}');
+        },
+      );
+    } catch (e) {
+      //tratamento de erros
+      log('Error initializing NFC: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("NFC Tools"),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //usado para mudar a página de leitura
-          setState(() {
-            readPage = AfterRead(theme: theme);
-          });
-        },
-        child: const Icon(Icons.nfc),
       ),
       body: PageView(
         //pageview reconhece gestos e troca de paginas
