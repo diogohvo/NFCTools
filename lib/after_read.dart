@@ -64,8 +64,7 @@ class AfterRead extends StatelessWidget {
               leading: const Icon(Icons.content_paste_search),
               title: Text(
                   'Conteúdo: ${_getPayloadType(utf8.decode(cachedMessage[0]['type']))}'),
-              subtitle:
-                  Text(utf8.decode(cachedMessage[0]['payload'].sublist(3))),
+              subtitle: Text(utf8.decode(cachedMessage[0]['payload'])),
             ),
           ),
         ],
@@ -92,6 +91,8 @@ class AfterRead extends StatelessWidget {
   String _getPayloadType(String encoded) {
     if (encoded == 'T') {
       return 'Texto';
+    } else if (encoded == 'U') {
+      return 'URL / Localização';
     }
     return encoded;
   }

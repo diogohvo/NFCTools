@@ -139,4 +139,10 @@ class _HomepageNav extends State<HomepageNav> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    NfcManager.instance.stopSession();
+    super.dispose();
+  }
 }
